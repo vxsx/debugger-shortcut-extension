@@ -15,7 +15,9 @@
         "persistent": true
     },
     "page_action": {
-        "default_icon": "icons/icon38.png"
+        "default_icon": "icons/icon38.png",
+        "default_title": "Options for Debugger Shortcut.",
+        "default_popup": "src/page_action/page_action.html"
     },
     "permissions": [
         "http://*/*",
