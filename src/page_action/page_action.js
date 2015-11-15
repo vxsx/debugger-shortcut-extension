@@ -8,7 +8,7 @@ const KEYMAP = {
     13: 'enter',
     19: 'pause/break',
     20: 'caps lock',
-    27: 'escape',
+    27: 'Esc',
     32: 'space',
     33: 'page up',
     34: 'page down',
@@ -143,6 +143,8 @@ const updateDom = (event) => {
     }
     if (KEYMAP[event.keyCode]) {
         input.value = KEYMAP[event.keyCode];
+    } else {
+        input.value = '';
     }
 };
 
