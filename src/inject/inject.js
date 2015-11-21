@@ -10,17 +10,17 @@ const INTERVAL = 100;
 
 const inject = function inject(document) {
     const readyStateCheckInterval = setInterval(() => {
-        if (document.readyState === "complete") {
+        if (document.readyState === 'complete') {
             clearInterval(readyStateCheckInterval);
 
-            document.body.addEventListener('keydown', (event) => {
+            document.body.addEventListener('keydown', event => {
                 if (
                     event.keyCode === SHORTCUT.keyCode &&
                     event.ctrlKey === SHORTCUT.ctrlKey &&
                     event.altKey === SHORTCUT.altKey &&
                     event.shiftKey === SHORTCUT.shiftKey
                 ) {
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                 }
             }, true);
         }

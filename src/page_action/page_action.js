@@ -112,12 +112,12 @@ const KEYMAP = {
     221: ']',
     222: '\'',
     225: 'altgr'
-}
+};
 
 const input = document.querySelector('#shortcut');
-const ctrl = document.querySelector('#modifier-ctrl')
-const alt = document.querySelector('#modifier-alt')
-const shift = document.querySelector('#modifier-shift')
+const ctrl = document.querySelector('#modifier-ctrl');
+const alt = document.querySelector('#modifier-alt');
+const shift = document.querySelector('#modifier-shift');
 const save = document.querySelector('button');
 
 let SHORTCUT = {
@@ -128,7 +128,7 @@ let SHORTCUT = {
 };
 let shortcut;
 
-const updateDom = (event) => {
+const updateDom = event => {
     ctrl.classList.remove('active');
     alt.classList.remove('active');
     shift.classList.remove('active');
@@ -148,7 +148,7 @@ const updateDom = (event) => {
     }
 };
 
-input.addEventListener('keydown', (event) => {
+input.addEventListener('keydown', event => {
     event.preventDefault();
 
     shortcut = {
@@ -172,14 +172,14 @@ input.addEventListener('keydown', (event) => {
     }
 });
 
-save.addEventListener('click', (e) => {
+save.addEventListener('click', e => {
     e.preventDefault();
     chrome.storage.local.set({ SHORTCUT: shortcut }, () => {
         save.setAttribute('disabled', true);
     });
 });
 
-chrome.storage.local.get('SHORTCUT', (value) => {
+chrome.storage.local.get('SHORTCUT', value => {
     if (value && typeof value.SHORTCUT === 'object') {
         SHORTCUT = value.SHORTCUT;
     }
