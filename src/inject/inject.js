@@ -35,7 +35,7 @@ const inject = function inject(document) {
                 Array.from(iframes).forEach(iframe => {
                     if (!iframe.ready) {
                         iframe.ready = true;
-                        if (iframe.getAttribute('src')) {
+                        if (iframe.getAttribute('src') && !iframe.getAttribute('src').match(/javascript:/)) {
                             iframe.addEventListener('load', () => {
                                 inject(iframe.contentDocument);
                             });
