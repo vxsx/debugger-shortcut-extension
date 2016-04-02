@@ -9,6 +9,10 @@ let SHORTCUT = {
 const INTERVAL = 100;
 
 const inject = function inject(document) {
+    if (!document) {
+        return;
+    }
+
     const readyStateCheckInterval = setInterval(() => {
         if (document.readyState === 'complete') {
             clearInterval(readyStateCheckInterval);
