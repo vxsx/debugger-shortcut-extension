@@ -9,7 +9,7 @@ let SHORTCUT = {
 const INTERVAL = 100;
 
 const inject = function inject(document) {
-    if (!document) {
+    if (!document || !document.body) {
         return;
     }
 
