@@ -8,16 +8,12 @@ let SHORTCUT = {
 };
 const INTERVAL = 100;
 
-const inject = function inject(document) {
-    if (!document || !document.body) {
-        return;
-    }
-
+const inject = function inject(doc) {
     const readyStateCheckInterval = setInterval(() => {
-        if (document.readyState === 'complete') {
+        if (doc.readyState === 'complete') {
             clearInterval(readyStateCheckInterval);
 
-            document.body.addEventListener('keydown', event => {
+            doc.body.addEventListener('keydown', event => {
                 if (
                     event.keyCode === SHORTCUT.keyCode &&
                     event.ctrlKey === SHORTCUT.ctrlKey &&
@@ -41,7 +37,15 @@ const inject = function inject(document) {
                         iframe.ready = true;
                         if (iframe.getAttribute('src') && !iframe.getAttribute('src').match(/javascript:/)) {
                             iframe.addEventListener('load', () => {
-                                inject(iframe.contentDocument);
+                                let iframeDoc;
+
+                                try {
+                                    iframeDoc = iframe.contentDocument;
+                                } catch(e) {}
+
+                                if (iframeDoc) {
+                                    inject(iframe.contentDocument);
+                                }
                             });
                         } else {
                             // if iframe has no src but still has content
@@ -57,7 +61,7 @@ const inject = function inject(document) {
 
             return false;
         });
-    }).observe(document.body, {
+    }).observe(doc.body, {
         childList: true,
         subtree: true
     });
