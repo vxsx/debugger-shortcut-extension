@@ -23,48 +23,48 @@ const inject = function inject(doc) {
                     debugger; // eslint-disable-line no-debugger
                 }
             }, true);
+
+            new MutationObserver(mutations => {
+                mutations.some(mutation => {
+                    // if iframe is added dynamically to the page
+                    if (mutation.type === 'childList' && mutation.addedNodes.length) {
+                        const iframes = document.querySelectorAll('iframe');
+
+                        Array.from(iframes).forEach(iframe => {
+                            if (!iframe.ready) {
+                                iframe.ready = true;
+                                if (iframe.getAttribute('src') && !iframe.getAttribute('src').match(/javascript:/)) {
+                                    iframe.addEventListener('load', () => {
+                                        let iframeDoc;
+
+                                        try {
+                                            iframeDoc = iframe.contentDocument;
+                                        } catch(e) {}
+
+                                        if (iframeDoc) {
+                                            inject(iframe.contentDocument);
+                                        }
+                                    });
+                                } else {
+                                    // if iframe has no src but still has content
+                                    // or if it doesn't have src at the moment of creation
+                                    // should be setInterval probably
+                                    setTimeout(() => {
+                                        inject(iframe.contentDocument);
+                                    }, INTERVAL);
+                                }
+                            }
+                        });
+                    }
+
+                    return false;
+                });
+            }).observe(doc.body, {
+                childList: true,
+                subtree: true
+            });
         }
     }, INTERVAL);
-
-    new MutationObserver(mutations => {
-        mutations.some(mutation => {
-            // if iframe is added dynamically to the page
-            if (mutation.type === 'childList' && mutation.addedNodes.length) {
-                const iframes = document.querySelectorAll('iframe');
-
-                Array.from(iframes).forEach(iframe => {
-                    if (!iframe.ready) {
-                        iframe.ready = true;
-                        if (iframe.getAttribute('src') && !iframe.getAttribute('src').match(/javascript:/)) {
-                            iframe.addEventListener('load', () => {
-                                let iframeDoc;
-
-                                try {
-                                    iframeDoc = iframe.contentDocument;
-                                } catch(e) {}
-
-                                if (iframeDoc) {
-                                    inject(iframe.contentDocument);
-                                }
-                            });
-                        } else {
-                            // if iframe has no src but still has content
-                            // or if it doesn't have src at the moment of creation
-                            // should be setInterval probably
-                            setTimeout(() => {
-                                inject(iframe.contentDocument);
-                            }, INTERVAL);
-                        }
-                    }
-                });
-            }
-
-            return false;
-        });
-    }).observe(doc.body, {
-        childList: true,
-        subtree: true
-    });
 };
 
 chrome.storage.local.get('SHORTCUT', value => {
